@@ -1,0 +1,523 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scotland Quiz — Stylesheet
+   Theme: Saltire blue, Highland green, white; tartan header accent.
+   Responsive to 360 px. WCAG AA contrast. Touch targets ≥ 44 px.
+   Transitions ≤ 300 ms.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Design tokens ─────────────────────────────────────────────────────── */
+:root {
+  /* Palette */
+  --blue:          #003F87;   /* Saltire blue */
+  --blue-dark:     #002B5E;   /* hover / header bg */
+  --blue-light:    #E8F0FF;   /* tinted bg for labels / hover */
+  --white:         #FFFFFF;
+  --off-white:     #F2F6FF;   /* page background */
+
+  /* Feedback */
+  --green:         #1B6E28;   /* correct — WCAG AA on white */
+  --green-bg:      #E9F5EC;
+  --red:           #B91C1C;   /* incorrect — WCAG AA on white */
+  --red-bg:        #FEE8E8;
+
+  /* Tartan accent colours */
+  --tartan-red:    #8B1919;
+  --highland-grn:  #1A5C1A;
+
+  /* Neutrals */
+  --text:          #111827;
+  --text-muted:    #4B5563;
+  --border:        #C8D8F0;
+
+  /* Shadow */
+  --shadow:        0 4px 24px rgba(0, 63, 135, 0.13);
+  --radius:        14px;
+  --radius-sm:     8px;
+}
+
+/* ── Reset / base ──────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+               Ubuntu, Cantarell, sans-serif;
+  background: var(--off-white);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
+
+/* ── Focus ring (keyboard navigation) ─────────────────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+header {
+  background: var(--blue-dark);
+  color: var(--white);
+  text-align: center;
+}
+
+.header-inner {
+  padding: 2rem 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.saltire-icon {
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--white);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.header-sub {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: 0.01em;
+}
+
+/* Tartan stripe — CSS-generated plaid accent */
+.tartan-stripe {
+  height: 12px;
+  /* Overlay thin white threads */
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 18px,
+      rgba(255, 255, 255, 0.22) 18px,
+      rgba(255, 255, 255, 0.22) 20px
+    ),
+    /* Underlaying block colour sequence */
+    repeating-linear-gradient(
+      90deg,
+      var(--tartan-red)    0px,
+      var(--tartan-red)    28px,
+      var(--blue-dark)     28px,
+      var(--blue-dark)     48px,
+      var(--highland-grn)  48px,
+      var(--highland-grn)  76px,
+      var(--blue-dark)     76px,
+      var(--blue-dark)     96px,
+      var(--tartan-red)    96px,
+      var(--tartan-red)   124px,
+      var(--blue-dark)    124px,
+      var(--blue-dark)    144px,
+      var(--highland-grn) 144px,
+      var(--highland-grn) 172px,
+      var(--blue-dark)    172px,
+      var(--blue-dark)    192px
+    );
+}
+
+/* ── Main / layout ────────────────────────────────────────────────────── */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 2.5rem;
+}
+
+/* ── Screens ──────────────────────────────────────────────────────────── */
+.screen {
+  width: 100%;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  width: 100%;
+  /* Fade transition for question changes */
+  transition: opacity 0.2s ease;
+}
+
+.card.fading {
+  opacity: 0;
+}
+
+/* ── Welcome screen ───────────────────────────────────────────────────── */
+.welcome-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  text-align: center;
+}
+
+.welcome-card h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  color: var(--blue-dark);
+}
+
+.welcome-text {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  max-width: 480px;
+}
+
+/* ── Progress ─────────────────────────────────────────────────────────── */
+.progress {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.progress-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+.progress-track {
+  height: 7px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 4px;
+  width: 10%; /* updated by JS */
+  transition: width 0.3s ease;
+}
+
+/* ── Timer display ────────────────────────────────────────────────────── */
+.timer-display {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--blue-dark);
+  text-align: center;
+  width: 100%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  transition: color 0.25s ease;
+}
+
+/* Append an 's' suffix via pseudo-element — purely decorative */
+.timer-display::after {
+  content: 's';
+  font-size: 1.1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin-left: 0.15em;
+  vertical-align: 0.2em;
+  color: var(--text-muted);
+}
+
+/* Warning state — ≤ 5 seconds remaining */
+.timer-display.timer-warning {
+  color: #cc0000;
+  animation: timer-pulse 0.75s ease-in-out infinite;
+}
+
+.timer-display.timer-warning::after {
+  color: #cc0000;
+}
+
+@keyframes timer-pulse {
+  0%,  100% { transform: scale(1); }
+  50%       { transform: scale(1.14); }
+}
+
+/* ── Category label ───────────────────────────────────────────────────── */
+.category-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--blue);
+  background: var(--blue-light);
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+
+/* ── Question text ────────────────────────────────────────────────────── */
+.question-text {
+  font-size: clamp(1rem, 2.5vw, 1.175rem);
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--text);
+  margin-bottom: 1.4rem;
+}
+
+/* ── Options ──────────────────────────────────────────────────────────── */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 1.4rem;
+}
+
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  min-height: 52px;        /* well above 44 px touch target */
+  padding: 0.7rem 1rem;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+  position: relative;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--blue);
+  background-color: var(--blue-light);
+}
+
+/* Correct answer */
+.option-btn.correct {
+  border-color: var(--green);
+  background-color: var(--green-bg);
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* Wrong selection */
+.option-btn.incorrect {
+  border-color: var(--red);
+  background-color: var(--red-bg);
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* Disabled (after answer selected, non-highlighted options) */
+.option-btn:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.option-btn.correct:disabled,
+.option-btn.incorrect:disabled {
+  opacity: 1;  /* keep feedback colours fully visible */
+}
+
+/* Letter badge (A / B / C / D) */
+.option-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  background: var(--border);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.option-btn.correct   .option-label { background: var(--green); color: var(--white); }
+.option-btn.incorrect .option-label { background: var(--red);   color: var(--white); }
+
+/* Option text */
+.option-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* Tick / cross icon (not the sole indicator — colour + icon together) */
+.option-icon {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 22px;
+  text-align: center;
+}
+
+.option-btn.correct   .option-icon { color: var(--green); }
+.option-btn.incorrect .option-icon { color: var(--red);   }
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 48px;
+  padding: 0.75rem 1.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.18s, transform 0.1s;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: var(--blue-dark);
+}
+
+.btn-large {
+  padding: 0.9rem 2.25rem;
+  font-size: 1.05rem;
+  min-height: 52px;
+}
+
+/* Next button spans full width of card */
+#next-btn {
+  width: 100%;
+}
+
+/* ── Results screen ───────────────────────────────────────────────────── */
+.results-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 2.5rem 2rem;
+}
+
+.saltire-deco {
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 3px 8px rgba(0, 43, 94, 0.3));
+}
+
+.score-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.score-fraction {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(3rem, 10vw, 4.5rem);
+  font-weight: 700;
+  color: var(--blue-dark);
+  line-height: 1.1;
+}
+
+.band-message {
+  font-size: 1.1rem;
+  color: var(--text);
+  line-height: 1.55;
+  max-width: 400px;
+  font-style: italic;
+}
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 1.25rem 1rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Responsive — narrow viewports ────────────────────────────────────── */
+@media (max-width: 520px) {
+  .card {
+    padding: 1.25rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .results-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  h1 {
+    font-size: 1.55rem;
+  }
+
+  .question-text {
+    font-size: 0.97rem;
+  }
+
+  .option-btn {
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+
+  .btn-large {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-inner {
+    padding: 1.25rem 0.75rem 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .option-label {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+  }
+}
